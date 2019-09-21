@@ -1,8 +1,7 @@
-
-/* https://blog.sourcerer.io/writing-a-simple-linux-kernel-module-d9dc3762c234
- * https://linux-kernel-labs.github.io/master/labs/device_drivers.html
+/* This module was written based on the two following sources:
+ *  * https://blog.sourcerer.io/writing-a-simple-linux-kernel-module-d9dc3762c234
+ *  * https://linux-kernel-labs.github.io/master/labs/device_drivers.html
  */
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -25,7 +24,6 @@ static ssize_t device_write(struct file *flip, const char __user *buffer, size_t
 static int device_open(struct inode *inode, struct file *file);
 static int device_release(struct inode *inode, struct file *file);
 
-/* This structure points to all of the device functions */
 static struct file_operations file_ops = {
   .read = device_read,
   .write = device_write,
@@ -38,7 +36,6 @@ struct my_device_data {
   char number[NUMBER_LEN+1];
 } dev;
 
-/* When a process reads from our device, this gets called. */
 static ssize_t device_read(struct file *flip, char __user *buffer, size_t len, loff_t *offset) {
   struct my_device_data *my_data;
   size_t count;
@@ -59,7 +56,6 @@ static ssize_t device_read(struct file *flip, char __user *buffer, size_t len, l
   return count;
 }
 
-/* Called when a process tries to write to our device */
 static ssize_t device_write(struct file *flip, const char __user *buffer, size_t len, loff_t *offset) {
   struct my_device_data *my_data;
   size_t count;
@@ -98,14 +94,12 @@ static ssize_t device_write(struct file *flip, const char __user *buffer, size_t
   return count;
 }
 
-/* Called when a process opens our device */
 static int device_open(struct inode *inode, struct file *file) {
   struct my_device_data *my_data = container_of(inode->i_cdev, struct my_device_data, cdev);
   file->private_data = my_data;
   return 0;
 }
 
-/* Called when a process closes our device */
 static int device_release(struct inode *inode, struct file *file) {
  return 0;
 }
