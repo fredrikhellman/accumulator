@@ -17,8 +17,11 @@ give the current value of the kept integer in as a string.
     $ cat /dev/accumulator
     0
     $ echo 2 > /dev/accumulator
+    $ cat /dev/accumulator
     2
     $ echo 2 > /dev/accumulator
+    $ cat /dev/accumulator
     4
     $ echo -5 > /dev/accumulator
+    $ cat /dev/accumulator
     -1
