@@ -1,9 +1,9 @@
 # Accumulator as a Linux kernel module
 
 This is a toy linux kernel module that implements a character device
-(123, 0) that holds an integer. Writing an integer (as a string) to
-the device will add the integer to the number. Reading it will give
-the current integer in as a string.
+(123, 0) that keeps an integer. Writing an integer (as a string) to
+the device will add the integer to the kept integer. Reading it will
+give the current value of the kept integer in as a string.
 
 ## Setup
 
