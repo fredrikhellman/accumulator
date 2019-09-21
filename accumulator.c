@@ -39,15 +39,14 @@ struct my_device_data {
 static ssize_t device_read(struct file *flip, char __user *buffer, size_t len, loff_t *offset) {
   struct my_device_data *my_data;
   size_t count;
-  
+
+  my_data = flip->private_data;
+
   if (*offset > 0) {
     return 0;
   }
 
-  my_data = flip->private_data;
-
   count = len < sizeof(my_data->number) ? len : sizeof(my_data->number);
-  
   if (copy_to_user(buffer, my_data->number, count))
     return -EFAULT;
   
@@ -64,31 +63,27 @@ static ssize_t device_write(struct file *flip, const char __user *buffer, size_t
   long input;
   long number;
   
+  my_data = flip->private_data;
+
   if (*offset > 0) {
     return -EINVAL;
   }
 
-  my_data = flip->private_data;
-
   count = len < sizeof(workspace) ? len : sizeof(workspace);
-  
   memset(workspace, 0, sizeof(workspace));
   if (copy_from_user(workspace, buffer, count)) {
     return -EFAULT;
   }
-
   if (kstrtol(workspace, 10, &input)) {
     return -EFAULT;
   }
-
   if (kstrtol(my_data->number, 10, &number)) {
     return -EFAULT;
   }
 
   number += input;
-
   snprintf(my_data->number, NUMBER_LEN+1, "%ld", number);  
-  
+
   *offset += count;
   
   return count;
